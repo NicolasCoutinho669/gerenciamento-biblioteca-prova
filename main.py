@@ -3,7 +3,7 @@ import os
 
 livros = [] #Lista para armazenar os livros cadastrados no sistema de biblioteca.
 
-with open("livros.csv", "a", newline="", encoding="utf-8") as catalogo:
+with open("livros.csv", "w", newline="", encoding="utf-8") as catalogo:
     livros.append(['Titulo','Autor','Ano de publicação','código/ISBN','Status']) #Adiciona as colunas de cada livro no arquivo "livros.csv".
     escritor = csv.writer(catalogo)
     escritor.writerows(livros)
