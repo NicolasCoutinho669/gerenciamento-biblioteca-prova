@@ -3,16 +3,19 @@ import os
 
 livros = [] #Lista para armazenar os livros cadastrados no sistema de biblioteca.
 
-with open("livros.csv", "w", newline="", encoding="utf-8") as catalogo:
-    livros.append(['Titulo','Autor','Ano de publicação','código/ISBN','Status']) #Adiciona as colunas de cada livro no arquivo "livros.csv".
-    escritor = csv.writer(catalogo)
-    escritor.writerows(livros)
+if not os.path.exists("livros.csv"): #Verifica se o arquivo "livros.csv" existe.
+    with open("livros.csv", "w", newline="", encoding="utf-8") as catalogo: #Cria o arquivo "livros.csv" caso ele não exista.
+        livros.append(['Titulo','Autor','Ano de publicação','código/ISBN','Status']) #Adiciona as colunas de cada livro no arquivo "livros.csv".
+        escritor = csv.writer(catalogo)
+        escritor.writerows(livros)
 
 print("Olá, bom dia!")
 print("Algoritmo de sistema de gerenciamento de biblioteca feito por Nicolas Robert de Vasconcellos Coutinho - 2°A.")
+
 def cadastrar():
     with open("livros.csv", "a", newline="", encoding="utf-8") as catalogo:
         escritor = csv.writer(catalogo)
+        print("\n----------------| CADASTRO DE LIVROS |----------------\n")
         titulo_livro = input("Digite o título do livro: ")
         autor_livro = input("Digite o autor do livro: ")
         ano_publicacao = input("Digite o ano de publicação do livro: ")
@@ -20,6 +23,7 @@ def cadastrar():
         status_livro = "Disponível" #Define o status inicial do livro como "Disponível" já que acabou de ser cadastrado.
         escritor.writerow([titulo_livro, autor_livro, ano_publicacao, codigo_isbn, status_livro]) #Insere as informações do livro no arquivo "livros.csv".
         print(f"\nO livro '{titulo_livro}' foi cadastrado com sucesso!")
+        print("------------------------------------------------------")
 
 def registrar_emprestimo():
     print("oi")
@@ -28,7 +32,16 @@ def registrar_devolucao():
     print("oi")
 
 def listar_livros():
-    print("oi")
+    with open("livros.csv", "r", newline="", encoding="utf-8") as catalogo: #Abre o arquivo "livros.csv" no modo de leitura.
+        leitor = csv.DictReader(catalogo) #Lê o arquivo "livros.csv" em forma de dicionário, onde cada linha é representada por uma coluna.
+        print("\n----------------| LISTA DE LIVROS |----------------\n")
+        for linha in leitor: #Percorre todas as linhas do arquivo "livros.csv" automaticamente e imprime as informações de cada livro.
+            print(f"Título: {linha['Titulo']}")
+            print(f"Autor: {linha['Autor']}")
+            print(f"Ano de publicação: {linha['Ano de publicação']}")
+            print(f"Código/ISBN: {linha['código/ISBN']}")
+            print(f"Status: {linha['Status']}\n")
+        print("----------------------------------------------------")
 
 def buscar_livro():
     print("oi")
