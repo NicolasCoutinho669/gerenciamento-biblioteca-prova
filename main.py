@@ -49,7 +49,29 @@ def registrar_emprestimo():
     print("-------------------------------------------------------")
 
 def registrar_devolucao():
-    print("oi")
+    codigo_isbn = input("Digite o código/ISBN do livro que deseja devolver: ") #Solicita o código/ISBN para verificar se o livro está emprestado ou não.
+    livros = [] #Lista para armazenar os livros cadastrados no sistema de biblioteca.
+    livro_encontrado = False #Define o status do livro como não encontrado inicialmente para verificar se o livro existe no catálogo.
+    print("\n----------------| REGISTRO DE DEVOLUÇÃO |----------------\n")
+    with open("livros.csv", "r", newline="", encoding="utf-8") as catalogo:
+        leitor = csv.DictReader(catalogo)
+        for linha in leitor: #Percorre todas as linhas do arquivo "livros.csv" automaticamente
+            if linha['código/ISBN'] == codigo_isbn: #Verifica se o código/ISBN é de algum livro cadastrado.
+                livro_encontrado = True
+                if linha['Status'] == "Emprestado":
+                    linha['Status'] = "Disponível"
+                    print(f"O livro '{linha['Titulo']}' foi devolvido com sucesso, obrigado!")
+                else:
+                    print(f"O livro '{linha['Titulo']}' está disponível, por isso não pode ser devolvido.")
+            livros.append(linha) #Adiciona as informações do livro na lista "livros" para reescrever o arquivo "livros.csv" posteriormente.
+    if not livro_encontrado: #Caso o livro não tenha sido encontrado, dá uma mensagem de erro pro usuário.
+        print("Livro não encontrado no catálogo. Verifique se o código/ISBN está correto.")
+    with open("livros.csv", "w", newline="", encoding="utf-8") as catalogo: #Reescreve o arquivo "livros.csv" com o empréstimo registrado.
+        campos = ['Titulo', 'Autor', 'Ano de publicação', 'código/ISBN', 'Status'] #Informa o que deve conter no cabeçalho do arquivo "livros.csv"
+        escritor = csv.DictWriter(catalogo, fieldnames=campos) #Define "fieldnames" como parâmetros para o cabeçalho do arquivo "livros.csv"
+        escritor.writeheader()
+        escritor.writerows(livros) #Reescreve as informações atualizadas dos livros.
+    print("-------------------------------------------------------")
 
 def listar_livros():
     with open("livros.csv", "r", newline="", encoding="utf-8") as catalogo: #Abre o arquivo "livros.csv" no modo de leitura.
